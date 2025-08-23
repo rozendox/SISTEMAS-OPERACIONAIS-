@@ -10,53 +10,88 @@ conforme discutido no Capítulo 1 do livro "Fundamentos de Sistemas Operacionais
   um temporizador ou dispositivo de entrada/saída.
 
 - Interrupção de Software:
-  Simulada pela captura de sinais do sistema operacional (SIGINT - Ctrl+C),
-  que alteram o fluxo do programa.
+  Simulada pela captura de sinais do sistema operacional (SIGINT - Ctrl+C).
+  Ao ser capturado, o sinal encerra o programa de forma controlada,
+  após registrar a interrupção e parar o simulador de hardware.
 
-Objetivo: ilustrar como o fluxo normal de execução é interrompido
+Objetivo:
+Mostrar como o fluxo normal de execução pode ser interrompido
 para lidar com eventos externos (hardware) ou internos (software).
 """
 
+import signal
+import time
+import threading
 import logging
 
+# Configuração do logger para simular mensagens de sistema operacional
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 
-class HardwareInterruptionSimulator:
+class HardwareInterruptSimulator:
     """
-    docstring for HardwareInterruptionSimulator
+    Classe que simula uma interrupção de hardware usando threads.
+    Exemplo: um temporizador que dispara periodicamente.
     """
 
-    def __init__(self):
+    def __init__(self, interval: int = 3):
         """
         Inicializa o simulador de interrupções.
+        :param interval: intervalo em segundos entre cada interrupção.
         """
-        pass
+        self.interval = interval
+        self.running = True
+        self.thread = threading.Thread(target=self._simulate_interrupt, daemon=True)
 
-    def start_thread(self):
-        logging.info("Inicializando")
-        pass
+    def start(self):
+        """Inicia a thread que dispara interrupções de hardware."""
+        logging.info("Iniciando simulador de interrupção de hardware...")
+        self.thread.start()
 
-    def simulate_interruption(self):
-        pass
+    def _simulate_interrupt(self):
+        """Método interno: gera interrupções a cada intervalo definido."""
+        while self.running:
+            time.sleep(self.interval)
+            logging.warning("[HARDWARE INTERRUPT] Temporizador disparado!")
 
-    def stop_thread(self):
-        pass
+    def stop(self):
+        """Interrompe a simulação de hardware interrupt."""
+        self.running = False
 
 
 class SoftwareInterruptSimulator:
     """
-    docstring for SoftwareInterruptSimulator
+    Classe que simula uma interrupção de software via sinais do SO.
+    Ao capturar Ctrl+C (SIGINT), interrompe o hardware e encerra o sistema.
     """
 
-    def __init__(self):
-        """Configura o manipulador para o sinal SIGINT (Ctrl+C)."""
+    def __init__(self, hardware: HardwareInterruptSimulator):
+        """
+        Configura o manipulador para o sinal SIGINT (Ctrl+C).
+        :param hardware: instância do simulador de hardware para ser encerrada.
+        """
+        self.hardware = hardware
+        signal.signal(signal.SIGINT, self._handle_signal)
 
     def _handle_signal(self, signum, frame):
-        """Função chamada automaticamente quando um sinal é capturado."""
-        logging.error(f"[SOFTWARE INTERRUPT] Capturado sinal {signum}. Fluxo alterado.")
+        """
+        Manipulador do sinal SIGINT.
+        Interrompe o hardware e encerra o programa.
+        """
+        logging.error(f"[SOFTWARE INTERRUPT] Capturado sinal {signum}. Encerrando sistema...")
+        self.hardware.stop()
+        raise SystemExit
 
 
 if __name__ == "__main__":
-    sim = HardwareInterruptionSimulator()
-    sim.start_thread()
+    # Inicializa simuladores
+    hw = HardwareInterruptSimulator(interval=5)
+    sw = SoftwareInterruptSimulator(hw)
+
+    # Inicia o simulador de hardware
+    hw.start()
+
+    # Loop principal (tarefa de usuário)
+    while True:
+        logging.info("Executando tarefa principal...")
+        time.sleep(2)
