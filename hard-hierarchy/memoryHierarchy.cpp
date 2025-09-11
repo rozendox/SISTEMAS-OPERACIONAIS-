@@ -1,4 +1,6 @@
 #include <iostream>
+#include <locale>
+#include <codecvt>
 #include <vector>
 #include <cstdlib>
 #include <cstdint>
@@ -45,15 +47,15 @@ int main() {
     });
 
     // Saída
-    std::cout << "\n=== Medição real de hierarquia de memória (ciclos de CPU) ===\n\n";
-    std::cout << "Nível         | Descrição                         | Tempo Médio (ciclos)\n";
+    std::cout << "\n=== Medicao real de hierarquia de memoria (ciclos de CPU) ===\n\n";
+    std::cout << "Nivel         | Descricao                         | Tempo MeSdio (ciclos)\n";
     std::cout << "-----------------------------------------------------------------\n";
-    std::cout << "Registrador   | Variável local (ultrarrápido)     | " << reg_time << "\n";
+    std::cout << "Registrador   | Variavel local (ultrarrapido)     | " << reg_time << "\n";
     std::cout << "Cache (L1/L2) | Array pequeno (~40KB)             | " << cache_time << "\n";
     std::cout << "RAM           | Array grande (~200MB)             | " << ram_time << "\n";
 
-    std::cout << "\nObservação:\n";
-    std::cout << "- Registradores são praticamente instantâneos.\n";
+    std::cout << "\nObservacao:\n";
+    std::cout << "- Registradores sao praticamente instantaneos.\n";
     std::cout << "- Cache L1/L2 atende rapidamente arrays pequenos.\n";
-    std::cout << "- RAM tem latência centenas de vezes maior.\n";
+    std::cout << "- RAM tem latencia centenas de vezes maior.\n";
 }
