@@ -150,10 +150,3 @@ Simular acessos de leitura/escrita com proteção de páginas.
 Integrar logs em arquivo externo (.log).
 Usar threads para simular acessos concorrentes à MMU.
 ```
-Referências
-
-```
-TANENBAUM, Andrew S.; AUSTIN, Todd. Organização Estruturada de Computadores. 6ª ed. Pearson, 2013.
-STALLINGS, William. Arquitetura e Organização de Computadores. 10ª ed. Pearson, 2021.
-MACHADO, Ricardo. Sistemas Operacionais: Conceitos e Mecanismos Fundamentais. Elsevier, 2017.
-```
