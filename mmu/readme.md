@@ -67,19 +67,8 @@ sico)×PAGE_SIZE+Deslocamento
 Sendo:
 
 Quadro Físico = page_table[número_página]
-
 Deslocamento = VA % PAGE_SIZE
-
 Número da Página = VA / PAGE_SIZE
-```
-📁 Estrutura do Projeto
-mmu_simulator/
-├── src/
-│   └── mmu_simulator.c
-├── Makefile
-└── README.md
-```
-
 Execute o programa no terminal:
 
 ./mmu_simulator
